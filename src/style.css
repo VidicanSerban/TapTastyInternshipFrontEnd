@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #FFF7D4;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -64,19 +64,53 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.title {
+  text-align: center;
+  color: #4C3D3D;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+  border: none;
+}
+
+.navbar li {
+  margin-right: 10px;
+}
+
+.navbar button {
+  border: 1px solid #C07F00;
+  color: #4C3D3D;
+  background-color: #FFD95A;
+  cursor: pointer;
+}
+ #nume_categorii {
+  margin-left: 40%;
+  margin-right: 40%;
+  border: 1px solid #C07F00;
+  color: #4C3D3D;
+  background-color: #FFD95A;
+ }
 .card-container {
   display: flex;
   flex-wrap: wrap;
+  color: #4C3D3D;
   justify-content: flex-start;
   margin: -5px; /* Negative margin to offset the card spacing */
 }
 
 .card {
-  flex: 0 0 calc(33.33% - 40px); /* Adjust the width as needed */
+  flex: 0 0 calc(33.33% - 32px); /* Adjust the width as needed */
   margin: 5px; /* Set the horizontal margin to 5px */
   margin-bottom: 10px; /* Set the bottom margin to 10px */
   padding: 10px;
-  border: 1px solid #ccc;
+  background-color: #FFD95A;
+  border: 1px solid #C07F00;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 #app {

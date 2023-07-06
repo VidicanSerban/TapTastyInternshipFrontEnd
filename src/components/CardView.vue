@@ -18,6 +18,10 @@
         <label for="cantitate">Cantitate:</label>
         <input type="number" id="cantitate" v-model="formData.cantitate" required>
       </div>
+      <div class="form-group">
+        <label for="detalii">Detalii:</label>
+        <input type="text" id="detalii" v-model="formData.detalii">
+      </div>
       <button type="submit">Adaugati produs</button>
     </form>
   </div>
@@ -39,7 +43,7 @@ export default {
   },
   methods: {
     addProduct() {
-      axios.post('http://laravel.test/produse', this.formData)
+      axios.post('http://laravel.test/produseinsert', this.formData)
         .then(response => {
           console.log(response.data);
           // Realizează orice acțiuni supțională după adăugarea produsului, cum ar fi golirea formularului sau reîncărcarea listei de produse
