@@ -1,26 +1,19 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <div>
-      <label for="nume">Nume:</label>
-      <input type="text" id="nume" v-model="form.nume" />
+  <div>
+    <div v-for="(produseCategorie, categorie) in produseGrupate" :key="categorie">
+      <h2 id="nume_categorii">{{ categorie }}</h2>
+      <div class="card-container">
+        <div v-for="produs in produseCategorie" :key="produs.id" class="card">
+          <h3>{{ produs.nume }}</h3>
+          <p>Categorie: {{ produs.categorie.nume }}</p>
+          <p>Pret: {{ produs.pret }}</p>
+          <p>Cantitate: {{ produs.cantitate }}</p>
+        </div>
+      </div>
     </div>
-    <div>
-      <label for="prenume">Prenume:</label>
-      <input type="text" id="prenume" v-model="form.prenume" />
-    </div>
-    <div>
-      <label for="data_nasterii">Data Nasterii:</label>
-      <input type="date" id="data_nasterii" v-model="form.data_nasterii" />
-    </div>
-    <div>
-      <label for="comentarii">Comentarii:</label>
-      <textarea id="comentarii" v-model="form.comentarii"></textarea>
-    </div>
-    <div>
-      <button type="submit">Submit</button>
-    </div>
-  </form>
+  </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -28,30 +21,33 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      form: {
-        nume: '',
-        prenume: '',
-        data_nasterii: '',
-        comentarii: '',
-      },
+      produse: [],
+      produseGrupate: {}
     };
   },
-  methods: {
-    submitForm() {
-      axios.post('http://laravel.test/store', this.form)
-        .then(response => {
-          // Handle the successful response
-          console.log(response.data);
-        })
-        .catch(error => {
-          // Handle the error
-          console.error(error);
-        });
-    },
+  mounted() {
+    axios.get('http://laravel.test/produse')
+      .then(response => {
+        this.produse = response.data;
+        this.groupProductsByCategory();
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
+  methods: {
+    groupProductsByCategory() {
+      this.produseGrupate = this.produse.reduce((grupate, produs) => {
+        const categorie = produs.categorie.nume;
+        if (!grupate[categorie]) {
+          grupate[categorie] = [];
+        }
+        grupate[categorie].push(produs);
+        return grupate;
+      }, {});
+    }
+  }
 };
 </script>
 
-<style>
-/* Add your custom CSS styles here */
-</style>
+

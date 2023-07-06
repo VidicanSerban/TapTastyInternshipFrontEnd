@@ -64,8 +64,19 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: -5px; /* Negative margin to offset the card spacing */
+}
+
 .card {
-  padding: 2em;
+  flex: 0 0 calc(33.33% - 40px); /* Adjust the width as needed */
+  margin: 5px; /* Set the horizontal margin to 5px */
+  margin-bottom: 10px; /* Set the bottom margin to 10px */
+  padding: 10px;
+  border: 1px solid #ccc;
 }
 
 #app {
