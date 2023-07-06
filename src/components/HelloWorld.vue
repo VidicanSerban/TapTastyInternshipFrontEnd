@@ -8,6 +8,7 @@
           <p>Categorie: {{ produs.categorie.nume }}</p>
           <p>Pret: {{ produs.pret }}</p>
           <p>Cantitate: {{ produs.cantitate }}</p>
+          <p v-if="produs.detalii">{{ produs.detalii }}</p>
         </div>
       </div>
     </div>
@@ -37,6 +38,15 @@ export default {
   },
   methods: {
     groupProductsByCategory() {
+      this.produse.sort((a, b) => {
+        // Sortează produsele după ID-ul categoriei
+        if (a.categorie.id !== b.categorie.id) {
+          return a.categorie.id - b.categorie.id;
+        }
+        // Sortează produsele după ID-ul produsului
+        return a.id - b.id;
+      });
+
       this.produseGrupate = this.produse.reduce((grupate, produs) => {
         const categorie = produs.categorie.nume;
         if (!grupate[categorie]) {
@@ -49,5 +59,3 @@ export default {
   }
 };
 </script>
-
-
