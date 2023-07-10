@@ -5,7 +5,7 @@
         <form class="container-fluid justify-content-end">
           <button class="btn btn-outline-dark me-2" type="button">Login</button>
           <button class="btn btn-outline-dark me-2" type="button">Sign Up</button>
-          <!-- <button class="btn btn-outline-dark me-2" @click="goToDefault">Go Back</button> -->
+          <button class="btn btn-outline-dark me-2" @click="goToHomePage">Go Back</button>
         </form>
       </nav>
     </header>
@@ -55,25 +55,29 @@ export default {
     }, 0);
   },
   methods: {
-      async sendEmail() {
-        // Make an API call to your Laravel backend to send the email
-        try {
-          const response = await axios.post('http://laravel.test/send-email', {
-            produseCos: this.produseCos,
-            sumaTotala: this.sumaTotala
-          });
-          if (response.data.success) {
-            // Handle success, e.g., display success message or perform additional tasks
-            console.log('Email sent and data saved');
-          } else {
-            // Handle failure, if needed
-            console.log('Failed to send email or save data');
-          }
-        } catch (error) {
-          // Handle any errors that occur during the API call
-          console.error(error);
+    goToHomePage() {
+      // Navigate to the home page with route "/lista-produse"
+      this.$router.push('/');
+    },
+    async sendEmail() {
+      // Make an API call to your Laravel backend to send the email
+      try {
+        const response = await axios.post('http://laravel.test/send-email', {
+          produseCos: this.produseCos,
+          sumaTotala: this.sumaTotala
+        });
+        if (response.data.success) {
+          // Handle success, e.g., display success message or perform additional tasks
+          console.log('Email sent and data saved');
+        } else {
+          // Handle failure, if needed
+          console.log('Failed to send email or save data');
         }
+      } catch (error) {
+        // Handle any errors that occur during the API call
+        console.error(error);
       }
     }
-  };
+  }
+};
 </script>
