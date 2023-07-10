@@ -5,9 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 </script>
 
 <template>
-  <HelloWorld/>
+  <!-- <HelloWorld/> -->
   <!--<CardView/>-->
+  <router-view></router-view>
 </template>
-<style setup>
-  
-</style>

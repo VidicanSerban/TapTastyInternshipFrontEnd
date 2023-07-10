@@ -32,12 +32,15 @@
             <p>Cantitate: {{ produs.cantitate }} {{ produs.cantitate > 1 ? (produs.cantitate > 19 ? 'de' : '') + ' bucăți' : 'bucată' }}</p>
             <p v-if="produs.detalii">Detalii: {{ produs.detalii }}</p>
             <button class="btn btn-outline-dark" @click="addToCart(produs)">
-              <img src="/src/assets/images/cos_cumparaturi.jpg" alt="Add to Cart Icon" class="btn-icon">
+              <!-- <img src="/src/assets/images/cos_cumparaturi.jpg" alt="Add to Cart Icon" class="btn-icon"> -->
               Adauga in cos
             </button>
           </div>
         </div>
       </div>
+      <div v-if="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
     </div>
 
     <footer class="footer fixed-bottom bg-light">
@@ -49,17 +52,18 @@
 
 <script>
 import axios from 'axios';
-
 export default {
   data() {
     return {
       produse: [],
       produseGrupate: {},
       categorii: [],
-      selectedCategory: null
+      selectedCategory: null,
+      successMessage: ''
     };
   },
   mounted() {
+    localStorage.clear();
     axios.get('http://laravel.test/produseget')
       .then(response => {
         this.produse = response.data;
@@ -118,20 +122,23 @@ export default {
         }
       }
     },
-    // addToCart(produs) {
-    // // Adăugați produsul în coșul de cumpărături
-    // // Acesta poate fi un vector sau o altă structură de date utilizată pentru a stoca produsele din coș
+    goToCart() {
+    this.$router.push('/cosul-meu');
+    },
+    addToCart(produs) {
+      // Get the existing cart items from local storage (if any)
+      const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      // Add the selected product to the cart items
+      existingCartItems.push(produs);
+      // Update the cart items in local storage
+      localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
+      this.successMessage = 'Produsul a fost adaugat in cosul dumneavoastra cu succes';
 
-    // // Exemplu de adăugare a produsului într-un vector numit "cosulMeu"
-    // this.cosulMeu.push(produs);
-    // },
-    // goToCart() {
-    // // Redirecționați utilizatorul către pagina "CosulMeu.vue"
-    // // Acest lucru poate fi realizat utilizând router-ul specific framework-ului dvs. sau prin utilizarea window.location.href
-    // // De exemplu, în Vue Router, puteți utiliza metoda router.push() pentru a redirecționa utilizatorul
-
-    // this.$router.push('/cosul-meu');
-    // }
+    
+      setTimeout(() => {
+        this.successMessage = '';
+      }, 3000);
+    }
   }
 };
 </script>

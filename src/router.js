@@ -1,15 +1,27 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import CosulMeu from './components/CosulMeu.vue';
+import HelloWorld from './components/HelloWorld.vue';
 
-Vue.use(Router);
-
-export default new Router({
+const router = createRouter({
+  history: createWebHistory(),
   routes: [
     {
+      path: '/',
+      component: HelloWorld,
+    },
+    {
       path: '/cosul-meu',
-      name: 'CosulMeu',
-      component: CosulMeu
-    }
-  ]
+      component: CosulMeu,
+      beforeEnter: (to, from, next) => {
+        if (from.path !== '/') {
+          next('/');
+        } else {
+          next();
+        }
+      },
+    },
+    // Other routes
+  ],
 });
+
+export default router;
