@@ -81,13 +81,33 @@ button:focus-visible {
   border: 1px solid #1A5D1A !important;
   color: #1A5D1A !important;
 }
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
 .card {
+  width: 250px; /* Adjust the width as needed */
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
   background-color: #F1C93B !important;
   color: #1A5D1A !important;
   border: 1px solid #1A5D1A !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  margin-bottom: 3%;
+}
+
+.card h3 {
+  margin-top: 10px; /* Adjust the spacing between the title and other elements */
+}
+
+.card p {
+  margin-bottom: 5px; /* Adjust the spacing between the paragraphs */
+}
+
+.card button {
+  margin-top: 10px; /* Adjust the spacing between the content and the button */
 }
 
 .card img {

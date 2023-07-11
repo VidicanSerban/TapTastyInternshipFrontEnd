@@ -12,6 +12,7 @@
             </div>
             <button type="submit" class="btn btn-primary mt-3">Autentifica-te</button>
         </form>
+        <button @click="signUp" class="btn btn-secondary mt-3">Nu ai cont? Inregistreaza-te</button>
     </div>
 </template>
 
@@ -36,7 +37,7 @@ export default {
                     if (response.data.success) {
                         // Redirect to the main page
                         this.$router.push('/');
-                        
+
                         // Save the email in session storage
                         sessionStorage.setItem('email', this.form.email);
                     } else {
@@ -48,7 +49,10 @@ export default {
                     // Handle the error
                     console.log(error);
                 });
-        }
+        },
+        signUp() {
+            this.$router.push('/signup');
+        },
     }
 };
 </script>
