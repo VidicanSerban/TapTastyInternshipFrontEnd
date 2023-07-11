@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Sign Up</h1>
+        <h1>Inregistreaza-te</h1>
         <form @submit.prevent="submitForm" class="form-card">
             <div class="form-group">
                 <label for="nume">Nume:</label>
@@ -22,8 +22,11 @@
                 <label for="adresa">Adresa:</label>
                 <input type="text" id="adresa" v-model="form.adresa" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Sign Up</button>
+            <button type="submit" class="btn btn-primary mt-3">Inregistreaza-te</button>
+
         </form>
+        <button @click="login" class="btn btn-secondary mt-3" >Ai deja un cont? Autentifica-te</button>
+
     </div>
 </template>
   
@@ -56,6 +59,9 @@ export default {
                     // Handle the error
                     console.log(error);
                 });
+        },
+        login() {
+            this.$router.push('/login');
         }
     }
 };

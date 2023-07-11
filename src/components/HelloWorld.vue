@@ -3,8 +3,8 @@
     <header class="header fixed-top bg-light">
       <nav class="navbar bg-warning">
         <form class="container-fluid justify-content-end">
-          <button class="btn btn-outline-dark me-2" type="button">Login</button>
-          <button class="btn btn-outline-dark me-2" type="button" @click="signUp">Sign Up</button>
+          <button class="btn btn-outline-dark me-2" type="button" @click="login">Autentifica-te</button>
+          <button class="btn btn-outline-dark me-2" type="button" @click="signUp">Inregistreaza-te</button>
           <button class="btn btn-outline-dark me-2" type="button" @click="goToCart">Cosul meu</button>
         </form>
       </nav>
