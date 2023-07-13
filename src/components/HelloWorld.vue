@@ -3,8 +3,8 @@
     <header class="header fixed-top bg-light">
       <nav class="navbar bg-warning">
         <form class="container-fluid justify-content-end">
-          <button class="btn btn-outline-dark me-2" type="button" @click="login">Autentifica-te</button>
-          <button class="btn btn-outline-dark me-2" type="button" @click="signUp">Inregistreaza-te</button>
+          <button class="btn btn-outline-dark me-2" type="button" @click="navigateToLogin">Autentifica-te</button>
+          <button class="btn btn-outline-dark me-2" type="button" @click="navigateToSignUp">Inregistreaza-te</button>
           <button class="btn btn-outline-dark me-2" type="button" @click="goToCart">Cosul meu</button>
         </form>
       </nav>
@@ -55,7 +55,6 @@
 
 <script>
 import axios from 'axios';
-import Login from './Login.vue';
 export default {
   data() {
     return {
@@ -67,7 +66,7 @@ export default {
     };
   },
   mounted() {
-    localStorage.clear();
+    sessionStorage.setItem("email", "wot.serbanv@gmail.com");
     axios.get('http://laravel.test/produseget')
       .then(response => {
         this.produse = response.data;
@@ -79,7 +78,14 @@ export default {
       });
   },
   methods: {
+    navigateToSignUp() {
+      this.$router.push('/signup');
+    },
+    navigateToLogin() {
+      this.$router.push('/login');
+    },
     groupProductsByCategory() {
+
       this.produse.sort((a, b) => {
         // Sortează produsele după ID-ul categoriei
         if (a.categorie.id !== b.categorie.id) {
@@ -130,37 +136,45 @@ export default {
       this.$router.push('/cosul-meu');
     },
     addToCart(produs) {
-      // Check if there is an email in the session
-      axios.get('http://laravel.test/checksession')
+      // Set the session email
+      axios.post('http://laravel.test/checksession', { email: sessionStorage.getItem('email') })
         .then(response => {
-          const { email } = response.data;
-          if (!email) {
-            // Redirect to the sign-up page if there is no email in the session
-            this.$router.push('/signup');
-          } else {
+          // Check if the email was successfully saved in the session
+          if (response.data.success) {
+            const { nume, cantitate, pret } = produs;
+
             // Get the existing cart items from local storage (if any)
             const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-            // Add the selected product to the cart items
-            existingCartItems.push(produs);
+
+            // Check if the product with the same name already exists in the cart
+            const existingProductIndex = existingCartItems.findIndex(item => item.nume === nume);
+
+            if (existingProductIndex !== -1) {
+              // If the product already exists, update its quantity and price
+              existingCartItems[existingProductIndex].cantitate += cantitate;
+              existingCartItems[existingProductIndex].pret += pret;
+            } else {
+              // If the product does not exist, add it to the cart
+              existingCartItems.push({ nume, cantitate, pret });
+            }
+
             // Update the cart items in local storage
             localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
+
             this.successMessage = 'Produsul a fost adaugat in cosul dumneavoastra cu succes';
 
             setTimeout(() => {
               this.successMessage = '';
             }, 3000);
+          } else {
+            // Handle failure to save the email in the session, if needed
+            console.log('Failed to save email in the session');
           }
         })
         .catch(error => {
           console.log(error);
         });
     },
-    signUp(){
-      this.$router.push('/signup');
-    },
-    login(){
-      this.$router.push('/login');
-    }
   }
 };
 </script>

@@ -15,8 +15,8 @@
                 <input type="email" id="email" v-model="form.email" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="parola">Parola:</label>
-                <input type="password" id="parola" v-model="form.parola" class="form-control" required>
+                <label for="password">Parola:</label>
+                <input type="password" id="password" v-model="form.password" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="adresa">Adresa:</label>
@@ -25,8 +25,10 @@
             <button type="submit" class="btn btn-primary mt-3">Inregistreaza-te</button>
 
         </form>
-        <button @click="login" class="btn btn-secondary mt-3" >Ai deja un cont? Autentifica-te</button>
-
+        <div>
+            <button @click="navigateToLogin" class="btn btn-secondary mt-3">Ai deja un cont? Autentifica-te</button>
+        </div>
+        <button @click="goToHomePage" class="btn btn-secondary mt-3">Inapoi la cumparaturi</button>
     </div>
 </template>
   
@@ -41,15 +43,22 @@ export default {
                 nume: '',
                 prenume: '',
                 email: '',
-                parola: '',
+                password: '',
                 adresa: ''
             }
         };
     },
     methods: {
+        goToHomePage() {
+            // Navigate to the home page with route "/lista-produse"
+            this.$router.push('/');
+        },
+        navigateToLogin() {
+            this.$router.push('/login');
+        },
         submitForm() {
             // Perform form validation and submit the form data to the server
-            axios.post('http://laravel.test/signup', this.form)
+            axios.post('http://exampleapp.test/api/register', this.form)
                 .then(response => {
                     // Handle the response and redirect to the desired page
                     // For example, you can redirect to the login page
@@ -60,9 +69,6 @@ export default {
                     console.log(error);
                 });
         },
-        login() {
-            this.$router.push('/login');
-        }
     }
 };
 </script>

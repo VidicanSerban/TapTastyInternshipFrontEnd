@@ -3,9 +3,7 @@
     <header class="header fixed-top bg-light">
       <nav class="navbar bg-warning">
         <form class="container-fluid justify-content-end">
-          <button class="btn btn-outline-dark me-2" type="button">Login</button>
-          <button class="btn btn-outline-dark me-2" type="button">Sign Up</button>
-          <button class="btn btn-outline-dark me-2" @click="goToHomePage">Go Back</button>
+          <button class="btn btn-outline-dark me-2" @click="navigateToHomePage">Go Back</button>
         </form>
       </nav>
     </header>
@@ -20,21 +18,21 @@
       <div v-else>
         <div class="product-box" v-for="produs in produseCos" :key="produs.id">
           <h3>{{ produs.nume }}</h3>
+          <p>Cantitate: {{ produs.cantitate }}</p>
           <p>Pret: {{ produs.pret }} RON</p>
+          <button class="btn btn-outline-danger" @click="removeFromCart(produs)">Remove</button>
         </div>
 
         <div class="confirm">
           <p>Total de plată: {{ sumaTotala }} RON</p>
-          <button class="btn btn-outline-dark" @click="sendEmail">Confirma comanda</button>
+          <button class="btn btn-outline-dark" @click="confirmaComanda">Confirma comanda</button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-  
 <script>
-import axios from 'axios'
 export default {
   data() {
     return {
@@ -55,28 +53,26 @@ export default {
     }, 0);
   },
   methods: {
-    goToHomePage() {
-      // Navigate to the home page with route "/lista-produse"
+    navigateToHomePage() {
       this.$router.push('/');
     },
-    async sendEmail() {
-      // Make an API call to your Laravel backend to send the email
-      try {
-        const response = await axios.post('http://laravel.test/send-email', {
-          produseCos: this.produseCos,
-          sumaTotala: this.sumaTotala
-        });
-        if (response.data.success) {
-          // Handle success, e.g., display success message or perform additional tasks
-          console.log('Email sent and data saved');
-        } else {
-          // Handle failure, if needed
-          console.log('Failed to send email or save data');
-        }
-      } catch (error) {
-        // Handle any errors that occur during the API call
-        console.error(error);
+    removeFromCart(produs) {
+      // Find the index of the product in the cart
+      const index = this.produseCos.findIndex(item => item.id === produs.id);
+
+      if (index > -1) {
+        // Remove the product from the cart
+        this.produseCos.splice(index, 1);
+
+        // Update the total payment amount
+        this.sumaTotala -= produs.pret;
+
+        // Save the updated cart items to localStorage
+        localStorage.setItem('cartItems', JSON.stringify(this.produseCos));
       }
+    },
+    async confirmaComanda() {
+      this.$router.push('/confirma');
     }
   }
 };

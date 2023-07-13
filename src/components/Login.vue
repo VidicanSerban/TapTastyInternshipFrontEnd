@@ -7,12 +7,15 @@
                 <input type="email" id="email" v-model="form.email" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="parola">Parola:</label>
-                <input type="password" id="parola" v-model="form.parola" class="form-control" required>
+                <label for="password">Parola:</label>
+                <input type="password" id="password" v-model="form.password" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary mt-3">Autentifica-te</button>
         </form>
-        <button @click="signUp" class="btn btn-secondary mt-3">Nu ai cont? Inregistreaza-te</button>
+        <div>
+            <button @click="navigateToSignUp" class="btn btn-secondary mt-3">Nu ai cont? Inregistreaza-te</button>
+        </div>
+        <button @click="navigateToHomePage" class="btn btn-secondary mt-3">Inapoi la cumparaturi</button>
     </div>
 </template>
 
@@ -24,22 +27,27 @@ export default {
         return {
             form: {
                 email: '',
-                parola: ''
+                password: ''
             }
         };
     },
     methods: {
+        navigateToSignUp() {
+            this.$router.push('/signup');
+        },
+        navigateToHomePage() {
+            this.$router.push('/');
+        },
         submitForm() {
             // Perform form validation and submit the form data to the server
-            axios.post('http://laravel.test/login', this.form)
+            axios.post('http://exampleapp.test/api/login', this.form)
                 .then(response => {
                     // Handle the response
                     if (response.data.success) {
-                        // Redirect to the main page
-                        this.$router.push('/');
-
                         // Save the email in session storage
                         sessionStorage.setItem('email', this.form.email);
+                        // Redirect to the main page
+                        this.$router.push('/');
                     } else {
                         // Handle invalid login credentials
                         console.log('Invalid login credentials');
@@ -49,9 +57,6 @@ export default {
                     // Handle the error
                     console.log(error);
                 });
-        },
-        signUp() {
-            this.$router.push('/signup');
         },
     }
 };
