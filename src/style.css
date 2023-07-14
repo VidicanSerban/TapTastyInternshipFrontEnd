@@ -64,6 +64,11 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+}
+
 .navbar .btn {
   background-color: #FBD85D;
   border-color: #1A5D1A;
@@ -158,6 +163,41 @@ button:focus-visible {
   background-color: #1A5D1A;
   font-weight: bold;
   color: #F1C93B;
+}
+
+.success-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  background-color: rgba(0, 128, 0, 0.8);
+  color: #fff;
+  font-size: 18px;
+  border-radius: 5px;
+  z-index: 999;
+}
+
+@media (max-width: 400px) {
+  .menu-wrapper {
+    display: none !important;
+  }
+
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .menu-toggle .menu-icon {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+  }
+
+  
 }
 
 @media (min-width: 480px) {

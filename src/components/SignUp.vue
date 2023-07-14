@@ -3,13 +3,13 @@
         <h1>Inregistreaza-te</h1>
         <form @submit.prevent="submitForm" class="form-card">
             <div class="form-group">
-                <label for="nume">Nume:</label>
-                <input type="text" id="nume" v-model="form.nume" class="form-control" required>
+                <label for="name">Nume:</label>
+                <input type="text" id="name" v-model="form.name" class="form-control" required>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="prenume">Prenume:</label>
                 <input type="text" id="prenume" v-model="form.prenume" class="form-control" required>
-            </div>
+            </div> -->
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" v-model="form.email" class="form-control" required>
@@ -18,10 +18,10 @@
                 <label for="password">Parola:</label>
                 <input type="password" id="password" v-model="form.password" class="form-control" required>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="adresa">Adresa:</label>
                 <input type="text" id="adresa" v-model="form.adresa" class="form-control" required>
-            </div>
+            </div> -->
             <button type="submit" class="btn btn-primary mt-3">Inregistreaza-te</button>
 
         </form>
@@ -40,11 +40,11 @@ export default {
     data() {
         return {
             form: {
-                nume: '',
-                prenume: '',
+                name: '',
+                // prenume: '',
                 email: '',
                 password: '',
-                adresa: ''
+                // adresa: ''
             }
         };
     },

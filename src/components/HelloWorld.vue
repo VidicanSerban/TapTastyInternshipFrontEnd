@@ -2,9 +2,34 @@
   <div>
     <header class="header fixed-top bg-light">
       <nav class="navbar bg-warning">
-        <form class="container-fluid justify-content-end">
-          <button class="btn btn-outline-dark me-2" type="button" @click="navigateToLogin">Autentifica-te</button>
-          <button class="btn btn-outline-dark me-2" type="button" @click="navigateToSignUp">Inregistreaza-te</button>
+        <div class="menu-wrapper container-fluid justify-content-end">
+          <!-- Show the user's email and logout button if logged in -->
+          <div v-if="loggedIn">
+            <span class="navbar-text me-2">Logged in as {{ userEmail }}</span>
+            <button class="btn btn-outline-dark me-2" type="button" @click="logout">Logout</button>
+          </div>
+          <!-- Show login and sign up buttons if logged out -->
+          <div v-else>
+            <button class="btn btn-outline-dark me-2" type="button" @click="navigateToLogin">Autentifica-te</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="navigateToSignUp">Inregistreaza-te</button>
+          </div>
+          <button class="btn btn-outline-dark me-2" type="button" @click="goToCart">Cosul meu</button>
+        </div>
+        <!-- Add a hamburger icon for small screens -->
+        <div class="menu-toggle" @click="toggleMenu">
+          <img class="menu-icon" src="src\assets\images\menu.png">
+        </div>
+        <!-- Add a class to hide the menu items on small screens -->
+        <form class="container-fluid justify-content-end" v-show="showMenu">
+          <div v-if="loggedIn">
+            <span class="navbar-text me-2">Logged in as {{ userEmail }}</span>
+            <button class="btn btn-outline-dark me-2" type="button" @click="logout">Logout</button>
+          </div>
+          <!-- Show login and sign up buttons if logged out -->
+          <div v-else>
+            <button class="btn btn-outline-dark me-2" type="button" @click="navigateToLogin">Autentifica-te</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="navigateToSignUp">Inregistreaza-te</button>
+          </div>
           <button class="btn btn-outline-dark me-2" type="button" @click="goToCart">Cosul meu</button>
         </form>
       </nav>
@@ -40,7 +65,7 @@
           </div>
         </div>
       </div>
-      <div v-if="successMessage" class="alert alert-success">
+      <div v-if="successMessage" class="success-message">
         {{ successMessage }}
       </div>
     </div>
@@ -48,6 +73,9 @@
     <footer class="footer fixed-bottom bg-light">
       Image by <a
         href="https://www.freepik.com/free-photo/shopping-carts-facing-each-other_5496677.htm#query=shopping%20background&position=46&from_view=keyword&track=ais">Freepik</a>
+      <br>
+      Hamburger Menu by <a href="https://www.flaticon.com/free-icons/menu" title="menu icons">Menu icons created by
+        Febrian Hidayat - Flaticon</a>
     </footer>
   </div>
 </template>
@@ -62,11 +90,21 @@ export default {
       produseGrupate: {},
       categorii: [],
       selectedCategory: null,
-      successMessage: ''
+      successMessage: '',
+      showMenu: false,
+      loggedIn: false,
+      userEmail: '',
     };
   },
   mounted() {
-    sessionStorage.setItem("email", "wot.serbanv@gmail.com");
+    const userEmail = sessionStorage.getItem('email');
+    if (userEmail) {
+      this.loggedIn = true;
+      this.userEmail = userEmail;
+    } else {
+      this.loggedIn = false;
+    }
+
     axios.get('http://laravel.test/produseget')
       .then(response => {
         this.produse = response.data;
@@ -78,6 +116,22 @@ export default {
       });
   },
   methods: {
+    logout() {
+      axios.post('http://exampleapp.test/api/logout')
+        .then(response => {
+          // Handle successful logout
+          // For example, redirect the user to the login page
+          sessionStorage.clear();
+          this.$router.push('/');
+          
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    toggleMenu() {
+      this.showMenu = !this.showMenu;
+    },
     navigateToSignUp() {
       this.$router.push('/signup');
     },
