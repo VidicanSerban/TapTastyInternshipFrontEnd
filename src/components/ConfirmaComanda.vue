@@ -3,10 +3,10 @@
     <h1 class="mb-4">Confirm Order</h1>
 
     <form @submit.prevent="sendEmail" class="form-card">
-      <div class="mb-3">
+      <!-- <div class="mb-3">
         <label for="numeClient" class="form-label">Nume Client:</label>
         <input type="text" id="numeClient" class="form-control" v-model="numeClient" required>
-      </div>
+      </div> -->
 
       <div class="mb-3">
         <label for="adresaClient" class="form-label">Adresa Client:</label>
@@ -32,9 +32,9 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      numeClient: '',
+      //numeClient: '',
       adresaClient: '',
-      email: '',
+      //email: '',
     };
   },
   created() {
@@ -57,11 +57,13 @@ export default {
 
       try {
         const response = await axios.post('http://laravel.test/send-email', {
-          numeClient: this.numeClient,
           adresaClient: this.adresaClient,
-          email: sessionStorage.getItem('email'),
           produseCos: this.produseCos,
           sumaTotala: this.sumaTotala,
+        }, {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
         });
         if (response.data.success) {
           // Handle success, e.g., display success message or perform additional tasks

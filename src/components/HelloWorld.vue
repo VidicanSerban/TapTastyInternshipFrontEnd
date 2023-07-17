@@ -5,8 +5,8 @@
         <div class="menu-wrapper container-fluid justify-content-end">
           <!-- Show the user's email and logout button if logged in -->
           <div v-if="loggedIn">
-            <span class="navbar-text me-2">Logged in as {{ userEmail }}</span>
             <button class="btn btn-outline-dark me-2" type="button" @click="logout">Logout</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="redirectToOrderHistory">Istoric comenzi</button>
           </div>
           <!-- Show login and sign up buttons if logged out -->
           <div v-else>
@@ -22,8 +22,8 @@
         <!-- Add a class to hide the menu items on small screens -->
         <form class="container-fluid justify-content-end" v-show="showMenu">
           <div v-if="loggedIn">
-            <span class="navbar-text me-2">Logged in as {{ userEmail }}</span>
             <button class="btn btn-outline-dark me-2" type="button" @click="logout">Logout</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="redirectToOrderHistory">Istoric comenzi</button>
           </div>
           <!-- Show login and sign up buttons if logged out -->
           <div v-else>
@@ -97,10 +97,10 @@ export default {
     };
   },
   mounted() {
-    const userEmail = sessionStorage.getItem('email');
-    if (userEmail) {
+    const userToken = sessionStorage.getItem('token');
+    if (userToken) {
       this.loggedIn = true;
-      this.userEmail = userEmail;
+      this.userToken = userToken;
     } else {
       this.loggedIn = false;
     }
@@ -117,18 +117,32 @@ export default {
   },
   methods: {
     logout() {
-      axios.post('http://exampleapp.test/api/logout')
-        .then(response => {
-          // Handle successful logout
-          // For example, redirect the user to the login page
-          sessionStorage.clear();
-          this.$router.push('/');
-          
-        })
-        .catch(error => {
-          console.log(error);
-        });
+        // Get the token from the session storage
+        const token = sessionStorage.getItem('token');
+
+        // Include the token in the request headers
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        // Make the logout API call
+        axios.post('http://exampleapp.test/api/logout')
+            .then(response => {
+                // Handle the response
+                console.log(response.data.message);
+
+                // Remove the token from session storage after successful logout
+                sessionStorage.removeItem('token');
+
+                // Redirect to the login page or any other appropriate page
+                this.$router.push('/login');
+            })
+            .catch(error => {
+                // Handle the error
+                console.log(error);
+            });
     },
+    redirectToOrderHistory() {
+    this.$router.push('/istoric');
+  },
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
@@ -191,7 +205,7 @@ export default {
     },
     addToCart(produs) {
       // Set the session email
-      axios.post('http://laravel.test/checksession', { email: sessionStorage.getItem('email') })
+      axios.post('http://laravel.test/checksession', { token: sessionStorage.getItem('token') })
         .then(response => {
           // Check if the email was successfully saved in the session
           if (response.data.success) {

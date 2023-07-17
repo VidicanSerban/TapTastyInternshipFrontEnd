@@ -43,9 +43,9 @@ export default {
             axios.post('http://exampleapp.test/api/login', this.form)
                 .then(response => {
                     // Handle the response
-                    if (response.data.success) {
+                    if (response.data.token) {
                         // Save the email in session storage
-                        sessionStorage.setItem('email', this.form.email);
+                        sessionStorage.setItem('token', response.data.token);
                         // Redirect to the main page
                         this.$router.push('/');
                     } else {
