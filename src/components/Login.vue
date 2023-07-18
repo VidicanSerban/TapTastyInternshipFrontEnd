@@ -17,11 +17,13 @@
         </div>
         <button @click="navigateToHomePage" class="btn btn-secondary mt-3">Inapoi la cumparaturi</button>
     </div>
+
+    <Footer></Footer>
 </template>
 
 <script>
 import axios from 'axios';
-
+import Footer from './Footer.vue'
 export default {
     data() {
         return {
@@ -30,6 +32,9 @@ export default {
                 password: ''
             }
         };
+    },
+    components: {
+        Footer,
     },
     methods: {
         navigateToSignUp() {
@@ -46,6 +51,7 @@ export default {
                     if (response.data.token) {
                         // Save the email in session storage
                         sessionStorage.setItem('token', response.data.token);
+                        sessionStorage.setItem('userId', response.data.userId);
                         // Redirect to the main page
                         this.$router.push('/');
                     } else {

@@ -30,12 +30,14 @@
         </div>
         <button @click="goToHomePage" class="btn btn-secondary mt-3">Inapoi la cumparaturi</button>
     </div>
+
+    <Footer></Footer>
 </template>
   
   
 <script>
 import axios from 'axios';
-
+import Footer from './Footer.vue'
 export default {
     data() {
         return {
@@ -47,6 +49,9 @@ export default {
                 // adresa: ''
             }
         };
+    },
+    components: {
+        Footer,
     },
     methods: {
         goToHomePage() {

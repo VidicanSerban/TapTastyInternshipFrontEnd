@@ -22,20 +22,25 @@
     </form>
     <button @click="navigateToHomePage" class="btn btn-secondary mt-3">Inapoi la cumparaturi</button>
   </div>
+  <Footer></Footer>
 </template>
 
 
   
 <script>
 import axios from 'axios';
-
+import Footer from './Footer.vue';
 export default {
   data() {
     return {
+      userId: '',
       //numeClient: '',
       adresaClient: '',
       //email: '',
     };
+  },
+  components: {
+    Footer,
   },
   created() {
     // Retrieve the cart items from localStorage when the component is created (page is loaded or refreshed)
@@ -57,14 +62,12 @@ export default {
 
       try {
         const response = await axios.post('http://laravel.test/send-email', {
+          userId: sessionStorage.getItem('userId'),
           adresaClient: this.adresaClient,
           produseCos: this.produseCos,
           sumaTotala: this.sumaTotala,
-        }, {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-          },
-        });
+        },
+        );
         if (response.data.success) {
           // Handle success, e.g., display success message or perform additional tasks
           console.log('Email sent and data saved');

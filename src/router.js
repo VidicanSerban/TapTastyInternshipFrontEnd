@@ -16,13 +16,7 @@ const router = createRouter({
     {
       path: '/cosul-meu',
       component: CosulMeu,
-      beforeEnter: (to, from, next) => {
-        if (from.path !== '/') {
-          next('/');
-        } else {
-          next();
-        }
-      },
+      
     },
     {
       path: '/signup',

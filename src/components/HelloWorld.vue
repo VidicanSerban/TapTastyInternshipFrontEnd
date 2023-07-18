@@ -70,19 +70,14 @@
       </div>
     </div>
 
-    <footer class="footer fixed-bottom bg-light">
-      Image by <a
-        href="https://www.freepik.com/free-photo/shopping-carts-facing-each-other_5496677.htm#query=shopping%20background&position=46&from_view=keyword&track=ais">Freepik</a>
-      <br>
-      Hamburger Menu by <a href="https://www.flaticon.com/free-icons/menu" title="menu icons">Menu icons created by
-        Febrian Hidayat - Flaticon</a>
-    </footer>
+    <Footer></Footer>
   </div>
 </template>
 
 
 <script>
 import axios from 'axios';
+import Footer from './Footer.vue';
 export default {
   data() {
     return {
@@ -95,6 +90,9 @@ export default {
       loggedIn: false,
       userEmail: '',
     };
+  },
+  components: {
+    Footer,
   },
   mounted() {
     const userToken = sessionStorage.getItem('token');
@@ -130,7 +128,7 @@ export default {
                 console.log(response.data.message);
 
                 // Remove the token from session storage after successful logout
-                sessionStorage.removeItem('token');
+                sessionStorage.clear();
 
                 // Redirect to the login page or any other appropriate page
                 this.$router.push('/login');

@@ -178,6 +178,15 @@ button:focus-visible {
   z-index: 999;
 }
 
+.order {
+  border: 1px solid #1A5D1A; /* Add a border to each order */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a shadow to each order */
+  padding: 10px; /* Add some padding to improve the visual appearance */
+  margin-bottom: 10px; /* Add some space between each order */
+  background-color: #F1C93B;
+  color: #1A5D1A;
+}
+
 @media (max-width: 400px) {
   .menu-wrapper {
     display: none !important;

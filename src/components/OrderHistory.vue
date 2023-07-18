@@ -32,17 +32,19 @@
                 <!-- Display the details of each order here -->
                 <p>ID comanda: {{ order.id }}</p>
                 <p>Nume client: {{ order.numeClient }}</p>
-                <p>Adresa livrare: {{ order.adresaClient }} RON</p>
+                <p>Adresa livrare: {{ order.adresaClient }}</p>
                 <p>Valoarea comenzii: {{ order.sumaTotala }} RON</p>
                 <!-- You can display more details about the order as needed -->
             </div>
         </div>
     </div>
+
+    <Footer></Footer>
 </template>
 
 <script>
 import axios from 'axios';
-
+import Footer from './Footer.vue'
 export default {
     data() {
         return {
@@ -50,7 +52,11 @@ export default {
             userEmail: '',
             userOrders: [],
             showMenu: false,
+            userId: sessionStorage.getItem('userId')
         };
+    },
+    components: {
+        Footer,
     },
     mounted() {
         const userToken = sessionStorage.getItem('token');
@@ -109,7 +115,7 @@ export default {
                     },
                 })
                     .then(response => {
-                        const userEmail = response.data.email;
+                        //const userEmail = response.data.email;
                         // Now that we have the user's email, fetch the user's orders using the email
                         this.fetchUserOrders();
                     })
@@ -126,12 +132,8 @@ export default {
             // Pass the userEmail as a query parameter or in the request body, depending on the API's design
             axios.get('http://exampleapp.test/orders', {
                 params: {
-                    email: userEmail,
+                    userId: this.userId,
                 },
-                // Or if the API expects the email in the request body:
-                // data: {
-                //   email: userEmail,
-                // },
             })
                 .then(response => {
                     this.userOrders = response.data;

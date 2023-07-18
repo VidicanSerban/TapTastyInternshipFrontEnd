@@ -30,15 +30,21 @@
       </div>
     </div>
   </div>
+
+  <Footer></Footer>
 </template>
 
 <script>
+import Footer from './Footer.vue';
 export default {
   data() {
     return {
       produseCos: [], // A vector to store the products added to the cart
       sumaTotala: 0 // Variable to store the total payment amount
     };
+  },
+  components: {
+    Footer,
   },
   created() {
     // Retrieve the cart items from localStorage when the component is created (page is loaded or refreshed)
