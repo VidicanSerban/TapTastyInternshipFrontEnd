@@ -5,6 +5,9 @@ import SignUp from './components/SignUp.vue'
 import Login from './components/Login.vue'
 import ConfirmaComanda from './components/ConfirmaComanda.vue'
 import OrderHistory from './components/OrderHistory.vue'
+import ProductManagement from './components/admin/ProductManagement.vue'; // Import the ProductManagement component
+import CategoryManagement from './components/admin/CategoryManagement.vue'; // Import the CategoryManagement component
+import UserManagement from './components/admin/UserManagement.vue'; // Import the UserManagement component
 
 const router = createRouter({
   history: createWebHistory(),

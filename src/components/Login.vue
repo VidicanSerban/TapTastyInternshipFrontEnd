@@ -52,6 +52,7 @@ export default {
                         // Save the email in session storage
                         sessionStorage.setItem('token', response.data.token);
                         sessionStorage.setItem('userId', response.data.userId);
+                        sessionStorage.setItem('role', response.data.role);
                         // Redirect to the main page
                         this.$router.push('/');
                     } else {

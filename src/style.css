@@ -37,7 +37,7 @@ body {
   background-attachment: fixed;
 }
 
-h1 {
+h1, h2 {
   padding-top: 20px;
   font-size: 3.2em;
   line-height: 1.1;

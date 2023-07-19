@@ -3,81 +3,94 @@
     <header class="header fixed-top bg-light">
       <nav class="navbar bg-warning">
         <div class="menu-wrapper container-fluid justify-content-end">
-          <!-- Show the user's email and logout button if logged in -->
-          <div v-if="loggedIn">
-            <button class="btn btn-outline-dark me-2" type="button" @click="logout">Logout</button>
-            <button class="btn btn-outline-dark me-2" type="button" @click="redirectToOrderHistory">Istoric comenzi</button>
+          <div v-if="loggedIn && userRole === 'admin'">
+            <!-- Show only the 'Deconecteaza-te' button for admin -->
+            <button class="btn btn-outline-dark me-2" type="button" @click="logout">Deconecteaza-te</button>
           </div>
-          <!-- Show login and sign up buttons if logged out -->
+          <div v-else-if="loggedIn && userRole !== 'admin'">
+            <!-- Show additional buttons for logged-in non-admin users -->
+            <button class="btn btn-outline-dark me-2" type="button" @click="logout">Deconecteaza-te</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="redirectToOrderHistory">Istoric
+              comenzi</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="goToCart">Cosul meu</button>
+          </div>
           <div v-else>
+            <!-- Show login and sign up buttons for logged-out users -->
             <button class="btn btn-outline-dark me-2" type="button" @click="navigateToLogin">Autentifica-te</button>
             <button class="btn btn-outline-dark me-2" type="button" @click="navigateToSignUp">Inregistreaza-te</button>
           </div>
-          <button class="btn btn-outline-dark me-2" type="button" @click="goToCart">Cosul meu</button>
         </div>
-        <!-- Add a hamburger icon for small screens -->
         <div class="menu-toggle" @click="toggleMenu">
           <img class="menu-icon" src="src\assets\images\menu.png">
         </div>
-        <!-- Add a class to hide the menu items on small screens -->
         <form class="container-fluid justify-content-end" v-show="showMenu">
-          <div v-if="loggedIn">
-            <button class="btn btn-outline-dark me-2" type="button" @click="logout">Logout</button>
-            <button class="btn btn-outline-dark me-2" type="button" @click="redirectToOrderHistory">Istoric comenzi</button>
+          <!-- The same logic as in the navbar -->
+          <div v-if="loggedIn && userRole === 'admin'">
+            <button class="btn btn-outline-dark me-2" type="button" @click="logout">Deconecteaza-te</button>
           </div>
-          <!-- Show login and sign up buttons if logged out -->
+          <div v-else-if="loggedIn && userRole !== 'admin'">
+            <button class="btn btn-outline-dark me-2" type="button" @click="logout">Deconecteaza-te</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="redirectToOrderHistory">Istoric
+              comenzi</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="goToCart">Cosul meu</button>
+          </div>
           <div v-else>
-            <button class="btn btn-outline-dark me-2" type="button" @click="navigateToLogin">Autentifica-te</button>
-            <button class="btn btn-outline-dark me-2" type="button" @click="navigateToSignUp">Inregistreaza-te</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="navigateToLogin">Log in</button>
+            <button class="btn btn-outline-dark me-2" type="button" @click="navigateToSignUp">Sign up</button>
           </div>
-          <button class="btn btn-outline-dark me-2" type="button" @click="goToCart">Cosul meu</button>
         </form>
       </nav>
     </header>
 
-    <div>
-      <h1 class="title mt-5">Bine ati venit la The Wholesome Wheelbarrow</h1>
+    <div v-if="loggedIn">
+      <div v-if="userRole === 'admin'">
+        <!-- Render the AdminDashboard component for the admin user -->
+        <AdminDashboard />
+      </div>
+      <div v-else>
+        <h1 class="title mt-5">Bine ati venit la The Wholesome Wheelbarrow</h1>
+        <nav>
+          <ul class="menu nav justify-content-center">
+            <li v-for="categorie in categorii" :key="categorie.id">
+              <button class="btn btn-warning btn-outline-dark me-2 mb-2" @click="showProductsByCategory(categorie.id)">{{
+                categorie.nume }}</button>
+            </li>
+          </ul>
+        </nav>
 
-      <nav>
-        <ul class="menu nav justify-content-center">
-          <li v-for="categorie in categorii" :key="categorie.id">
-            <button class="btn btn-warning btn-outline-dark me-2 mb-2" @click="showProductsByCategory(categorie.id)">{{
-              categorie.nume }}</button>
-          </li>
-        </ul>
-      </nav>
-
-      <div v-if="selectedCategory">
-        <h2 id="nume_categorii" class="bg-warning text-dark d-inline-block p-2">{{ selectedCategory.nume }}</h2>
-        <div class="card-container">
-          <div v-for="produs in selectedCategory.produse" :key="produs.id" class="card px-2">
-            <img :src="getImageUrl(produs.imagine)" alt="Imagine produs" class="produs_img img-fluid">
-            <h3>{{ produs.nume }}</h3>
-            <p>Categorie: {{ produs.categorie.nume }}</p>
-            <p>Pret: {{ produs.pret }} RON</p>
-            <p>Cantitate: {{ produs.cantitate }} {{ produs.cantitate > 1 ? (produs.cantitate > 19 ? 'de' : '') + ' bucăți'
-              : 'bucată' }}</p>
-            <p v-if="produs.detalii">Detalii: {{ produs.detalii }}</p>
-            <button class="btn btn-outline-dark" @click="addToCart(produs)">
-              <!-- <img src="/src/assets/images/cos_cumparaturi.jpg" alt="Add to Cart Icon" class="btn-icon"> -->
-              Adauga in cos
-            </button>
+        <div v-if="selectedCategory">
+          <h2 id="nume_categorii" class="bg-warning text-dark d-inline-block p-2">{{ selectedCategory.nume }}</h2>
+          <div class="card-container">
+            <div v-for="produs in selectedCategory.produse" :key="produs.id" class="card px-2">
+              <img :src="getImageUrl(produs.imagine)" alt="Imagine produs" class="produs_img img-fluid">
+              <h3>{{ produs.nume }}</h3>
+              <p>Categorie: {{ produs.categorie.nume }}</p>
+              <p>Pret: {{ produs.pret }} RON</p>
+              <p>Cantitate: {{ produs.cantitate }} {{ produs.cantitate > 1 ? (produs.cantitate > 19 ? 'de' : '') + 'bucăți' : 'bucată' }}</p>
+              <p v-if="produs.detalii">Detalii: {{ produs.detalii }}</p>
+              <button class="btn btn-outline-dark" @click="addToCart(produs)">Adauga in cos</button>
+            </div>
           </div>
         </div>
+        <div v-if="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
       </div>
-      <div v-if="successMessage" class="success-message">
-        {{ successMessage }}
-      </div>
+    </div>
+
+    <div v-else>
+      <h1 class="title mt-5">Bine ati venit la The Wholesome Wheelbarrow</h1>
+      <!-- ... Existing content for logged out users ... -->
     </div>
 
     <Footer></Footer>
   </div>
 </template>
 
-
 <script>
 import axios from 'axios';
 import Footer from './Footer.vue';
+import AdminDashboard from './AdminDashboard.vue';
 export default {
   data() {
     return {
@@ -89,16 +102,19 @@ export default {
       showMenu: false,
       loggedIn: false,
       userEmail: '',
+      userRole: '',
     };
   },
   components: {
     Footer,
+    AdminDashboard,
   },
   mounted() {
     const userToken = sessionStorage.getItem('token');
     if (userToken) {
       this.loggedIn = true;
       this.userToken = userToken;
+      this.fetchUserRole();
     } else {
       this.loggedIn = false;
     }
@@ -115,32 +131,20 @@ export default {
   },
   methods: {
     logout() {
-        // Get the token from the session storage
-        const token = sessionStorage.getItem('token');
-
-        // Include the token in the request headers
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-        // Make the logout API call
-        axios.post('http://exampleapp.test/api/logout')
-            .then(response => {
-                // Handle the response
-                console.log(response.data.message);
-
-                // Remove the token from session storage after successful logout
-                sessionStorage.clear();
-
-                // Redirect to the login page or any other appropriate page
-                this.$router.push('/login');
-            })
-            .catch(error => {
-                // Handle the error
-                console.log(error);
-            });
+      const token = sessionStorage.getItem('token');
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.post('http://exampleapp.test/api/logout')
+        .then(response => {
+          sessionStorage.clear();
+          this.$router.push('/login');
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     redirectToOrderHistory() {
-    this.$router.push('/istoric');
-  },
+      this.$router.push('/istoric');
+    },
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
@@ -151,13 +155,10 @@ export default {
       this.$router.push('/login');
     },
     groupProductsByCategory() {
-
       this.produse.sort((a, b) => {
-        // Sortează produsele după ID-ul categoriei
         if (a.categorie.id !== b.categorie.id) {
           return a.categorie.id - b.categorie.id;
         }
-        // Sortează produsele după ID-ul produsului
         return a.id - b.id;
       });
 
@@ -172,11 +173,10 @@ export default {
       }, {});
     },
     getImageUrl(imagine) {
-      const baseUrl = 'http://laravel.test/imagini_produse/'; // înlocuiți cu URL-ul de bază al proiectului Laravel
+      const baseUrl = 'http://laravel.test/imagini_produse/';
       return `${baseUrl}${imagine}`;
     },
     fetchCategories() {
-      // Extract unique categories from the products
       const uniqueCategories = [...new Set(this.produse.map(produs => produs.categorie))];
       this.categorii = uniqueCategories.reduce((acc, categorie) => {
         if (!acc.find(c => c.id === categorie.id)) {
@@ -202,38 +202,24 @@ export default {
       this.$router.push('/cosul-meu');
     },
     addToCart(produs) {
-      // Set the session email
       axios.post('http://laravel.test/checksession', { token: sessionStorage.getItem('token') })
         .then(response => {
-          // Check if the email was successfully saved in the session
           if (response.data.success) {
             const { nume, cantitate, pret } = produs;
-
-            // Get the existing cart items from local storage (if any)
             const existingCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-
-            // Check if the product with the same name already exists in the cart
             const existingProductIndex = existingCartItems.findIndex(item => item.nume === nume);
-
             if (existingProductIndex !== -1) {
-              // If the product already exists, update its quantity and price
               existingCartItems[existingProductIndex].cantitate += cantitate;
               existingCartItems[existingProductIndex].pret += pret;
             } else {
-              // If the product does not exist, add it to the cart
               existingCartItems.push({ nume, cantitate, pret });
             }
-
-            // Update the cart items in local storage
             localStorage.setItem('cartItems', JSON.stringify(existingCartItems));
-
             this.successMessage = 'Produsul a fost adaugat in cosul dumneavoastra cu succes';
-
             setTimeout(() => {
               this.successMessage = '';
             }, 3000);
           } else {
-            // Handle failure to save the email in the session, if needed
             console.log('Failed to save email in the session');
           }
         })
@@ -241,6 +227,9 @@ export default {
           console.log(error);
         });
     },
-  }
+    fetchUserRole() {
+      this.userRole = sessionStorage.getItem('role');
+    },
+  },
 };
 </script>
